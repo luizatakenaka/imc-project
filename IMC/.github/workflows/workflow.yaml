@@ -1,0 +1,27 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        device: [iPhone 16 Pro]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        uses: apple-actions/setup-xcode@v2
+        
+      - name: Build and test
+        run: |
+          xcodebuild -scheme "IMC" -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=latest" test
