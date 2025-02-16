@@ -1,4 +1,4 @@
-name: CI Workflow
+name: Continuous Integration
 
 on:
   push:
@@ -11,10 +11,19 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        device: [iPhone 16 Pro]
+    
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Set up Swift
-        uses: actions/setup-swift@v1
-      - name: Build Project
-        run: swift build
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        uses: apple-actions/setup-xcode@v2
+        with:
+          xcode-version: '16.0'
+        
+      - name: Build and test
+        run: |
+          xcodebuild -scheme "IMC" -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.2" test
